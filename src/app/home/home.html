@@ -1,0 +1,75 @@
+<div class="container">
+
+    <h3>Animal Observation Form</h3>
+
+    <form #form="ngForm" novalidate>
+        <!--Template reference variable allows you to access a directive-->
+        <!--We can specify ngModel without any data to bind to because we-->
+        <!--want it to control this field.  name property is needed for ngModel-->
+        <div class="form-group has-error" [class.has-error]="animalName.invalid && animalName.touched">
+            <label class="control-label">Animal Name</label>
+            <input #animalName="ngModel" pattern="...+" required type="text" class="form-control" name="animalName" [ngModel]="model.animalName" (ngModelChange)="animalNameToUpperCase($event)">
+            <div *ngIf="animalName.invalid && animalName.touched" class="alert alert-danger">
+                Animal Name is required, and must be at least 3 characters.
+            </div>
+        </div>
+
+        <!--ng-touched & ng-untouched has to do if the field lost focus-->
+        <!--ng-pristine & ng-dirty has to do with the frm not being in its initial state-->
+        <!--ng-valid-->
+        <h3>Validation</h3>
+        <h4> Invalid: {{ animalName.invalid}} </h4>
+        <h4> Touched: {{ animalName.touched}} </h4>
+        <h4> Dirty: {{ animalName.dirty}} </h4>
+
+        <br><br>
+
+        <div class="form-group">
+            <label>Country Name: where Animal Lives</label>
+            <input type="text" class="form-control" name="countryName" [(ngModel)]="model.countryName">
+        </div>
+
+        <div class="checkbox">
+            <label>
+                <input type="checkbox" name="is-favoriteAnimal"
+                [(ngModel)]="model.isFavoriteAnimal">Favorite Animal
+            </label>
+        </div>
+
+        <label>Animal Class</label>
+        <div class="radio">
+            <label>
+                <input type="radio" name="animalClass" value="mammal" checked
+                    [(ngModel)]="model.animalClass">
+                Mammal
+            </label>
+        </div>
+        <div class="radio">
+            <label>
+                <input type="radio" name="animalClass" value="reptile"
+                    [(ngModel)]="model.animalClass">
+                Reptile
+            </label>
+        </div>
+
+        <div class="form-group" [class.has-error]="hasProductError">
+            <label class="control-label">Products Purchased</label>
+            <select class="form-control" #product name="product" (blur)="validateProduct(product.value)" (change)="validateProduct(product.value)" [(ngModel)]="model.product">
+                    <option value="default">Select a Product...</option>
+                    <option *ngFor="let product of products">
+                          {{ product }}  
+                    </option>
+                </select>
+        </div>
+
+        <button class="btn btn-primary" type="submit" [disabled]="form.invalid">Ok</button>
+
+    </form>
+
+    <br> Model: {{ model | json }} <br>
+    <br> Angular: {{ form.value | json }} <br>
+
+    <br> Form Pristine: {{ form.pristine }}
+    <br> Form Valid: {{ form.valid }}
+
+</div>
